@@ -56,8 +56,8 @@ modules:
           num_oid: '.1.3.6.1.4.1.1385.77.7.2.11.{{ $index }}'
           descr: Output Power
           divisor: 10
-          high_limit: 28
-          low_limit: 12
+          high_limit: 40
+          low_limit: 28
         -
           oid: amplifierDynamic
           value: amplifierPortOutputPower
@@ -109,14 +109,23 @@ modules:
           descr: Internal Temperature
           low_limit: -33
           high_limit: 70
+          skip_values:
+          -
+            oid: deviceInternalTemperatute.0
+            op: '=='
+            value: 0
         -
-          oid: amplifierRadiatorTemperature
+          oid: amplifierDynamic
+          value: amplifierRadiatorTemperature
+          index: 'amplifierRadiatorTemperature.{{ $index }}'
           num_oid: '.1.3.6.1.4.1.1385.77.7.2.16.{{ $index }}'
           descr: Amp Radiator Temperature
           low_limit: -33
           high_limit: 70
         -
-          oid: amplifierPrePumpTemperature
+          oid: amplifierDynamic
+          value: amplifierPrePumpTemperature
+          index: 'amplifierPrePumpTemperature.{{ $index }}'
           num_oid: '.1.3.6.1.4.1.1385.77.7.2.17.{{ $index }}'
           descr: Amp Pre-Pump Temperature
           divisor: 10
@@ -176,7 +185,7 @@ modules:
           oid: amplifierDynamic
           value: amplifierEnabled
           index: 'amplifierEnabled.{{ $index }}'
-          num_oid: '.1.3.6.1.4.1.1385.12.6.{{ $index }}'
+          num_oid: '.1.3.6.1.4.1.1385.77.7.2.6.{{ $index }}'
           descr: Amp Pump
           state_name: amplifierEnabled
           states:
@@ -186,7 +195,7 @@ modules:
           oid: amplifierDynamic
           value: amplifierMode
           index: 'amplifierMode.{{ $index }}'
-          num_oid: '.1.3.6.1.4.1.1385.12.7.{{ $index }}'
+          num_oid: '..1.3.6.1.4.1.1385.77.7.2.7.{{ $index }}'
           descr: Amp Mode
           state_name: amplifierMode
           states:
