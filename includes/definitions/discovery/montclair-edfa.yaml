@@ -1,0 +1,183 @@
+mib: Montclair-MIB
+modules:
+    os:
+        serial: Montclair-MIB::deviceSerialNumber.0
+        sysDescr_regex: '/(?<hardware>.*)/'
+    sensors:
+        count:
+            data:
+                -
+                    oid: deviceStatus
+                    value: devicePowerSupplyAmount
+                    num_oid: '.1.3.6.1.4.1.1385.12.3.0'
+                    descr: Power Supplies
+                -
+                    oid: deviceStatus
+                    value: deviceFanAmount
+                    num_oid: '.1.3.6.1.4.1.1385.12.6.0'
+                    descr: Fan Count
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPortAmount
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.13.0'
+                    descr: Ports
+        dbm:
+            data:
+                -
+                    oid: amplifierDynamic
+                    value: amplifierBackReflectionPower
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.4.0'
+                    descr: Amplifier Reflection
+                    divisor: 10
+                    high_limit: -15
+                -
+                    oid: amplifierDynamic
+                    value: amplifierInputPower
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.5.0'
+                    descr: Input Power
+                    divisor: 10
+                    high_limit: 10
+                    low_limit: 0
+                -
+                    oid: amplifierDynamic
+                    value: amplifierOutputPower
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.11.0'
+                    descr: Output Power
+                    divisor: 10
+                    high_limit: 28
+                    low_limit: 12
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPortOutputPower
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.14.0'
+                    descr: Port Output Power
+                    divisor: 10
+        percent:
+            data:
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPrePumpCurrent
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.8.0'
+                    descr: Pre-Pump Current
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPumpCurrent1
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.9.0'
+                    descr: Pump Current 1
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPumpCurrent2
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.10.0'
+                    descr: Pump Current 2
+        quality_factor:
+            data:
+                -
+                    oid: amplifierDynamic
+                    value: amplifierGain
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.12.0'
+                    descr: Amp Gain
+                    divisor: 10
+                -
+                    oid: amplifierDynamic
+                    value: amplifierPortGain
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.15.0'
+                    descr: Port Gain
+                    divisor: 10
+        temperature:
+            data:
+                -
+                    oid: deviceStatus
+                    value: deviceInternalTemperatute
+                    num_oid: '.1.3.6.1.4.1.1385.12.2.0'
+                    descr: Internal Temperature
+                    low_limit: -33
+                    high_limit: 70
+                -
+                    oid: amplifierRadiatorTemperature
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.16.0'
+                    descr: Amp Radiator Temperature
+                    low_limit: -33
+                    high_limit: 70
+                -
+                    oid: amplifierPrePumpTemperature
+                    num_oid: '.1.3.6.1.4.1.1385.77.7.2.17.0'
+                    descr: Amp Pre-Pump Temperature
+                    divisor: 10
+                    low_limit: -33
+                    high_limit: 70
+        state:
+            data:
+                -
+                    oid: deviceStatus
+                    value: devicePowerSupply1Status
+                    num_oid: '.1.3.6.1.4.1.1385.12.4.0'
+                    descr: Power Supply 1
+                    state_name: devicePowerSupply1Status
+                    states:
+                        - { value: 1, generic: 3, graph: 0, descr: Empty }
+                        - { value: 3, generic: 2, graph: 0, descr: Critical }
+                        - { value: 7, generic: 0, graph: 0, descr: Normal }
+                -
+                    oid: deviceStatus
+                    value: devicePowerSupply2Status
+                    num_oid: '.1.3.6.1.4.1.1385.12.5.0'
+                    descr: Power Supply 2
+                    state_name: devicePowerSupply2Status
+                    states:
+                        - { value: 1, generic: 3, graph: 0, descr: Empty }
+                        - { value: 3, generic: 2, graph: 0, descr: Critical }
+                        - { value: 7, generic: 0, graph: 0, descr: Normal }
+                -
+                    oid: deviceStatus
+                    value: deviceFanStatus
+                    num_oid: '.1.3.6.1.4.1.1385.12.7.0'
+                    descr: Fan Status
+                    state_name: deviceFanStatus
+                    states:
+                        - { value: 1, generic: 3, graph: 0, descr: Unknown }
+                        - { value: 3, generic: 2, graph: 0, descr: Critical }
+                        - { value: 5, generic: 2, graph: 0, descr: Warning }
+                        - { value: 7, generic: 0, graph: 0, descr: Normal }
+                -
+                    oid: deviceStatus
+                    value: deviceFanMode
+                    num_oid: '.1.3.6.1.4.1.1385.12.8.0'
+                    descr: Fan Mode
+                    state_name: deviceFanMode
+                    states:
+                        - { value: 1, generic: 0, graph: 0, descr: Auto }
+                        - { value: 2, generic: 0, graph: 0, descr: Manual }
+                        - { value: 3, generic: 0, graph: 0, descr: Low }
+                        - { value: 4, generic: 0, graph: 0, descr: Linear }
+                        - { value: 5, generic: 0, graph: 0, descr: High }
+                -
+                    oid: amplifierDynamic
+                    value: amplifierEnabled
+                    num_oid: '.1.3.6.1.4.1.1385.12.6.0'
+                    descr: Amp Pump
+                    state_name: amplifierEnabled
+                    states:
+                        - { value: 1, generic: 0, graph: 0, descr: Enabled }
+                        - { value: 2, generic: 2, graph: 0, descr: Disabled }
+                -
+                    oid: amplifierDynamic
+                    value: amplifierMode
+                    num_oid: '.1.3.6.1.4.1.1385.12.7.0'
+                    descr: Amp Mode
+                    state_name: amplifierMode
+                    states:
+                        - { value: 1, generic: 0, graph: 0, descr: ACC }
+                        - { value: 2, generic: 0, graph: 0, descr: APC }
+                        - { value: 3, generic: 0, graph: 0, descr: AGC }
+                -
+                    oid: axosCardTable
+                    value: axosCardAdminStatus
+                    num_oid: '.1.3.6.1.4.1.6321.1.2.4.2.4.1.1.3.{{ $index }}'
+                    descr: '{{ $axosCardSerialNumber }}'
+                    index: axosCardAdminStatus.{{ $index }}
+                    state_name: axosCardAdminStatus
+                    states:
+                        - { value: 0, generic: 3, graph: 0, descr: Unknown }
+                        - { value: 1, generic: 0, graph: 0, descr: Enabled }
+                        - { value: 2, generic: 1, graph: 0, descr: Alarm Suppress }
+                        - { value: 3, generic: 0, graph: 0, descr: Disabled }
