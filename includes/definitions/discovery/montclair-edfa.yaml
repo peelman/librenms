@@ -5,11 +5,11 @@ modules:
         sysDescr_regex: '/(?<hardware>.*)/'
     sensors:
         pre-cache:
-        data:
-            -
-                oid:
-                    - deviceStatus
-                    - amplifierDynamic
+          data:
+              -
+                  oid:
+                      - deviceStatus
+                      - amplifierDynamic
         count:
             data:
                 -
