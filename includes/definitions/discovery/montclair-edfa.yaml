@@ -4,6 +4,12 @@ modules:
         serial: Montclair-MIB::deviceSerialNumber.0
         sysDescr_regex: '/(?<hardware>.*)/'
     sensors:
+        pre-cache:
+        data:
+            -
+                oid:
+                    - deviceStatus
+                    - amplifierDynamic
         count:
             data:
                 -
