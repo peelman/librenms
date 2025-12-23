@@ -1,0 +1,76 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/librenms:cached
+      - composer-cache:/home/vscode/.composer
+      - pip-cache:/home/vscode/.cache/pip
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:vHI+YHgkyCDad31iPEErGSNEOWO21wNzV+zyENKQv04=
+      - APP_URL=http://localhost:8000
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=librenms
+      - DB_USERNAME=librenms
+      - DB_PASSWORD=librenms
+      - DB_TEST_HOST=db
+      - DB_TEST_PORT=3306
+      - DB_TEST_DATABASE=librenms_phpunit_78hunjuybybh
+      - DB_TEST_USERNAME=librenms
+      - DB_TEST_PASSWORD=librenms
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SNMPSIM_HOST=127.1.6.2
+      - SNMPSIM_PORT=1162
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - librenms-dev
+    # Keep container running
+    command: sleep infinity
+
+  db:
+    image: mariadb:11.7
+    environment:
+      - MARIADB_ROOT_PASSWORD=librenms
+      - MARIADB_USER=librenms
+      - MARIADB_PASSWORD=librenms
+      - MARIADB_DATABASE=librenms
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql
+    networks:
+      - librenms-dev
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-plibrenms"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - librenms-dev
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+networks:
+  librenms-dev:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  composer-cache:
+  pip-cache:

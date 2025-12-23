@@ -1,0 +1,44 @@
+{
+  "name": "LibreNMS Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/librenms",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "ms-python.python",
+        "EditorConfig.EditorConfig",
+        "dbaeumer.vscode-eslint",
+        "Vue.volar",
+        "GitHub.copilot"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  
+  "forwardPorts": [8000, 3306, 6379],
+  
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  
+  "remoteUser": "vscode",
+
+  "containerEnv": {
+    "APP_ENV": "local",
+    "APP_DEBUG": "true"
+  }
+}
