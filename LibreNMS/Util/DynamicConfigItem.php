@@ -332,37 +332,6 @@ class DynamicConfigItem implements \ArrayAccess
         return $result;
     }
 
-    private function regexErrorMessage(string $pattern): ?string
-    {
-        $error_message = null;
-        $previous_reporting = error_reporting();
-        error_reporting($previous_reporting | E_WARNING);
-        set_error_handler(static function ($errno, $errstr) use (&$error_message) {
-            $error_message = $errstr;
-
-            return true;
-        });
-
-        $result = preg_match($pattern, '');
-        $error = preg_last_error();
-        restore_error_handler();
-        error_reporting($previous_reporting);
-
-        if ($result !== false) {
-            return null;
-        }
-
-        if ($error_message) {
-            return $error_message;
-        }
-
-        if (function_exists('preg_last_error_msg')) {
-            return preg_last_error_msg();
-        }
-
-        return $error ? (string) $error : null;
-    }
-
     private function sanitizePath(string $path): string|false
     {
         if (preg_match('/[`;#$|&\'"><(]/', $path)) {
