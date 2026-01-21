@@ -83,7 +83,26 @@ class DynamicConfigItem implements \ArrayAccess
             return filter_var($value, FILTER_VALIDATE_EMAIL);
         } elseif ($this->type == 'array') {
             return is_array($value); // this should probably have more complex validation via validator rules
-        } elseif ($this->type == 'array-sub-keyed') {
+        } elseif ($this->type == 'map') {
+            if (! is_array($value)) {
+                return false;
+            }
+
+            foreach ($value as $key => $v) {
+                // values must be scalar (not arrays) for flat key-value maps
+                if (is_array($v)) {
+                    return false;
+                }
+
+                if (! $this->checkKey($key)) {
+                    return false;
+                }
+            }
+
+            return true;
+        } elseif ($this->type == 'nested-map' || $this->type == 'array-sub-keyed') {
+            // Note: 'array-sub-keyed' is deprecated, kept for backwards compatibility.
+            // Use 'nested-map' for new settings.
             if (! is_array($value)) {
                 return false;
             }
@@ -93,8 +112,7 @@ class DynamicConfigItem implements \ArrayAccess
                     return false;
                 }
 
-                // check keys not empty
-                if (is_string($key) && strlen(trim($key)) == 0) {
+                if (! $this->checkKey($key)) {
                     return false;
                 }
             }
@@ -254,6 +272,36 @@ class DynamicConfigItem implements \ArrayAccess
         return $this->name;
     }
 
+    public function checkKey($key): bool
+    {
+        $key = (string) $key;
+        if (strlen(trim($key)) === 0) {
+            return false;
+        }
+
+        if (($this->options['validateKeyAsRegex'] ?? false) && ! $this->isValidRegex($key)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getKeyValidationMessage($key): string
+    {
+        $key = (string) $key;
+        if (strlen(trim($key)) === 0) {
+            return __('settings.validate.key');
+        }
+
+        if ($this->options['validateKeyAsRegex'] ?? false) {
+            if (! $this->isValidRegex($key)) {
+                return __('settings.validate.regex');
+            }
+        }
+
+        return __('settings.validate.key');
+    }
+
     private function descriptionTranslationKey()
     {
         return "settings.settings.$this->name.description";
@@ -272,6 +320,49 @@ class DynamicConfigItem implements \ArrayAccess
     private function buildValidator($value)
     {
         return Validator::make(['value' => $value], $this->validate);
+    }
+
+    private function isValidRegex(string $pattern): bool
+    {
+        set_error_handler(static function () {
+            return true;
+        });
+
+        $result = @preg_match($pattern, '') !== false;
+        restore_error_handler();
+
+        return $result;
+    }
+
+    private function regexErrorMessage(string $pattern): ?string
+    {
+        $error_message = null;
+        $previous_reporting = error_reporting();
+        error_reporting($previous_reporting | E_WARNING);
+        set_error_handler(static function ($errno, $errstr) use (&$error_message) {
+            $error_message = $errstr;
+
+            return true;
+        });
+
+        $result = preg_match($pattern, '');
+        $error = preg_last_error();
+        restore_error_handler();
+        error_reporting($previous_reporting);
+
+        if ($result !== false) {
+            return null;
+        }
+
+        if ($error_message) {
+            return $error_message;
+        }
+
+        if (function_exists('preg_last_error_msg')) {
+            return preg_last_error_msg();
+        }
+
+        return $error ? (string) $error : null;
     }
 
     private function sanitizePath(string $path): string|false

@@ -274,7 +274,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => 'Chave para armazenar cache de descrições de sistemas autônomos',
+            'description' => 'Descrições de Sistemas Autônomos',
+            'help' => 'Lista de ASNs e suas descrições para exibir nomes personalizados em contextos de Roteamento',
         ],
         'auth' => [
             'allow_get_login' => [

@@ -156,7 +156,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => '用于存储自治系统描述的缓存的密钥',
+            'description' => '自治系统描述',
+            'help' => '用于在路由上下文中显示自定义名称的ASN列表及其描述',
         ],
         'auth_ad_base_dn' => [
             'description' => '基础 DN',

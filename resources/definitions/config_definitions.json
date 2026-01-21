@@ -472,7 +472,11 @@
                 "65332": "Cymru FullBogon Feed",
                 "65333": "Cymru Bogon Feed"
             },
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "ASN",
+                "valuePlaceholder": "Description"
+            },
             "group": "discovery",
             "section": "general",
             "order": 4
@@ -537,7 +541,7 @@
             "group": "auth",
             "section": "socialite",
             "order": 3,
-            "type": "array-sub-keyed",
+            "type": "nested-map",
             "validate": {
                 "value": "array|array_keys_not_empty",
                 "value.*": "array|array_keys_not_empty",
@@ -5122,7 +5126,11 @@
                 "discrete": "",
                 "percent": "load"
             },
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "IPMI Unit",
+                "valuePlaceholder": "Sensor Type"
+            },
             "group": "discovery",
             "section": "ipmi",
             "order": 1
@@ -5255,7 +5263,11 @@
         },
         "location_map": {
             "default": null,
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "SNMP sysLocation",
+                "valuePlaceholder": "Mapped Location"
+            },
             "validate": {
                 "value": "array",
                 "value.*": "string"
@@ -5266,7 +5278,12 @@
         },
         "location_map_regex": {
             "default": null,
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "Regex Pattern",
+                "valuePlaceholder": "Mapped Location",
+                "validateKeyAsRegex": true
+            },
             "validate": {
                 "value": "array",
                 "value.*": "string"
@@ -5277,7 +5294,12 @@
         },
         "location_map_regex_sub": {
             "default": null,
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "Regex Pattern",
+                "valuePlaceholder": "Replacement",
+                "validateKeyAsRegex": true
+            },
             "validate": {
                 "value": "array",
                 "value.*": "string"
@@ -5576,7 +5598,11 @@
                 "115200": "36 hours",
                 "153600": "48 hours"
             },
-            "type": "array"
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "Seconds",
+                "valuePlaceholder": "Display Label"
+            }
         },
         "nfsen_base": {
             "default": [],
@@ -6531,12 +6557,17 @@
             "default": {
                 "/^cpu interface/": "Mgmt"
             },
-            "type": "array",
+            "type": "map",
+            "options": {
+                "keyPlaceholder": "Regex Pattern",
+                "valuePlaceholder": "Replacement",
+                "validateKeyAsRegex": true
+            },
             "group": "discovery",
             "section": "ports",
             "validate": {
                 "value": "array",
-                "value.*": "is_regex"
+                "value.*": "string"
             },
             "order": 10
         },

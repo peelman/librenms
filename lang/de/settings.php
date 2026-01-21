@@ -155,7 +155,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => 'Key zum cachen von autonomen Systembeschreibungen',
+            'description' => 'Beschreibungen der Autonomen Systeme',
+            'help' => 'Liste der ASNs und ihrer Beschreibungen zur Anzeige benutzerdefinierter Namen in Routing-Kontexten',
         ],
         'auth_ad_base_dn' => [
             'description' => 'Base DN',

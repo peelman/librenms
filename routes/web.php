@@ -187,6 +187,7 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('settings/{tab?}/{section?}', [SettingsController::class, 'index'])->name('settings');
         Route::put('settings/{name}', [SettingsController::class, 'update'])->name('settings.update');
         Route::delete('settings/{name}', [SettingsController::class, 'destroy'])->name('settings.destroy');
+        Route::post('settings/{name}/validate', [SettingsController::class, 'validateSetting'])->name('settings.validate');
 
         Route::post('alert/transports/{transport}/test', [AlertTransportController::class, 'test'])->name('alert.transports.test');
         Route::resource('alert-rule', AlertRuleController::class)->only(['show', 'store', 'update', 'destroy']);

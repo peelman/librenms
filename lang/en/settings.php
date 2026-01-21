@@ -340,7 +340,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => 'Key to hold cache of autonomous systems descriptions',
+            'description' => 'Autonomous Systems Descriptions',
+            'help' => 'List of ASNs and their descriptions to show custom names in Routing contexts',
         ],
         'auth' => [
             'allow_get_login' => [
@@ -2519,6 +2520,12 @@ return [
         'select' => ':value is not an allowed value',
         'text' => ':value is not allowed',
         'array' => 'Invalid format',
+        'map' => 'Invalid key-value format',
+        'nested-map' => 'Invalid nested key-value format',
+        'key' => 'Invalid key',
+        'regex' => 'Invalid regex pattern',
+        'duplicate_key' => 'Key already exists',
+        'missing_parent' => 'Missing parent key',
         'executable' => ':value is not a valid executable',
         'directory' => ':value is not a valid directory',
     ],

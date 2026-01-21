@@ -210,7 +210,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => 'Key to hold cache of autonomous systems descriptions',
+            'description' => '自治系統描述',
+            'help' => '用於在路由上下文中顯示自訂名稱的ASN列表及其描述',
         ],
         'auth_ad_base_dn' => [
             'description' => '基礎 DN',

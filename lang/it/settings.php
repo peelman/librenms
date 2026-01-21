@@ -254,7 +254,8 @@ return [
             ],
         ],
         'astext' => [
-            'description' => 'Key to hold cache of autonomous systems descriptions',
+            'description' => 'Descrizioni dei Sistemi Autonomi',
+            'help' => 'Elenco di ASN e relative descrizioni per mostrare nomi personalizzati nei contesti di Routing',
         ],
         'auth' => [
             'socialite' => [
