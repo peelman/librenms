@@ -324,7 +324,7 @@ class DynamicConfigItem implements \ArrayAccess
 
     private function isValidRegex(string $pattern): bool
     {
-        set_error_handler(static fn() => true);
+        set_error_handler(static fn () => true);
 
         $result = @preg_match($pattern, '') !== false;
         restore_error_handler();
