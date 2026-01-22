@@ -103,14 +103,14 @@
         },
         computed: {
             keyPlaceholder() {
-                // Use translation key if available, otherwise fall back to 'Key'
                 const settingKey = 'settings.settings.' + this.name + '.keyPlaceholder';
-                return this.$te(settingKey) ? this.$t(settingKey) : this.$t('Key');
+                const translated = this.$t(settingKey);
+                return translated !== settingKey ? translated : this.$t('Key');
             },
             valuePlaceholder() {
-                // Use translation key if available, otherwise fall back to 'Value'
                 const settingKey = 'settings.settings.' + this.name + '.valuePlaceholder';
-                return this.$te(settingKey) ? this.$t(settingKey) : this.$t('Value');
+                const translated = this.$t(settingKey);
+                return translated !== settingKey ? translated : this.$t('Value');
             },
             validateKeyAsRegex() {
                 return this.validate?.key === 'regex';
