@@ -94,4 +94,51 @@ final class ConfigItemTest extends TestCase
         $this->assertFalse($array_keys_not_empty->checkValue([' ' => []]));
         $this->assertFalse($array_keys_not_empty->checkValue([null => []]));
     }
+
+    public function testMapValidation(): void
+    {
+        $mapType = new DynamicConfigItem('testMap', [
+            'type' => 'map',
+        ]);
+
+        // Valid cases - flat key-value pairs with scalar values
+        $this->assertTrue($mapType->checkValue(['foo' => 'bar']));
+        $this->assertTrue($mapType->checkValue(['65332' => 'Cymru FullBogon Feed']));
+        $this->assertTrue($mapType->checkValue(['key1' => 'value1', 'key2' => 'value2']));
+        $this->assertTrue($mapType->checkValue(['0' => 'zero']));
+        $this->assertTrue($mapType->checkValue([0 => 'zero']));
+        $this->assertTrue($mapType->checkValue(['foo' => ''])); // empty string value is ok
+        $this->assertTrue($mapType->checkValue([])); // empty array is ok
+
+        // Invalid cases
+        $this->assertFalse($mapType->checkValue(['foo' => ['nested']])); // arrays not allowed as values
+        $this->assertFalse($mapType->checkValue(['foo' => ['bar' => 'baz']])); // nested arrays not allowed
+        $this->assertFalse($mapType->checkValue(['' => 'value'])); // empty key
+        $this->assertFalse($mapType->checkValue([' ' => 'value'])); // whitespace-only key
+        $this->assertFalse($mapType->checkValue('not an array'));
+        $this->assertFalse($mapType->checkValue(null));
+    }
+
+    public function testNestedMapValidation(): void
+    {
+        $nestedMapType = new DynamicConfigItem('testNestedMap', [
+            'type' => 'nested-map',
+        ]);
+
+        // Valid cases - nested key-value structures
+        $this->assertTrue($nestedMapType->checkValue(['foo' => ['bar' => 'baz']]));
+        $this->assertTrue($nestedMapType->checkValue(['provider' => ['client_id' => '123', 'secret' => 'abc']]));
+        $this->assertTrue($nestedMapType->checkValue(['foo' => []])); // empty sub-array is ok
+        $this->assertTrue($nestedMapType->checkValue([])); // empty array is ok
+        $this->assertTrue($nestedMapType->checkValue(['0' => ['bar']]));
+        $this->assertTrue($nestedMapType->checkValue([0 => ['bar']]));
+
+        // Invalid cases
+        $this->assertFalse($nestedMapType->checkValue(['foo' => 'bar'])); // value must be array
+        $this->assertFalse($nestedMapType->checkValue(['foo' => null]));
+        $this->assertFalse($nestedMapType->checkValue(['foo' => false]));
+        $this->assertFalse($nestedMapType->checkValue(['' => []])); // empty key
+        $this->assertFalse($nestedMapType->checkValue([' ' => []])); // whitespace-only key
+        $this->assertFalse($nestedMapType->checkValue('not an array'));
+    }
 }
