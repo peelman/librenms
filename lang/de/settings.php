@@ -157,6 +157,8 @@ return [
         'astext' => [
             'description' => 'Beschreibungen der Autonomen Systeme',
             'help' => 'Liste der ASNs und ihrer Beschreibungen zur Anzeige benutzerdefinierter Namen in Routing-Kontexten',
+            'keyPlaceholder' => 'ASN',
+            'valuePlaceholder' => 'Beschreibung',
         ],
         'auth_ad_base_dn' => [
             'description' => 'Base DN',
@@ -535,6 +537,8 @@ return [
         ],
         'nfsen_lasts' => [
             'description' => 'Standard Last Options',
+            'keyPlaceholder' => 'Sekunden',
+            'valuePlaceholder' => 'Anzeigebezeichnung',
         ],
         'nfsen_split_char' => [
             'description' => 'Splitte Char',
@@ -806,5 +810,11 @@ return [
         'select' => ':value ist kein erlaubter Wert',
         'text' => ':value ist nicht erlaubt',
         'array' => 'Ungültiges Format',
+        'map' => 'Ungültiges Schlüssel-Wert-Format',
+        'nested-map' => 'Ungültiges verschachteltes Schlüssel-Wert-Format',
+        'key' => 'Ungültiger Schlüssel',
+        'regex' => 'Ungültiges Regex-Muster',
+        'duplicate_key' => 'Schlüssel existiert bereits',
+        'missing_parent' => 'Fehlender übergeordneter Schlüssel',
     ],
 ];

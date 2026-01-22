@@ -141,4 +141,51 @@ final class ConfigItemTest extends TestCase
         $this->assertFalse($nestedMapType->checkValue([' ' => []])); // whitespace-only key
         $this->assertFalse($nestedMapType->checkValue('not an array'));
     }
+
+    public function testCheckKeyValidation(): void
+    {
+        // Basic key validation without regex
+        $mapType = new DynamicConfigItem('testMap', [
+            'type' => 'map',
+        ]);
+
+        $this->assertTrue($mapType->checkKey('foo'));
+        $this->assertTrue($mapType->checkKey('65332'));
+        $this->assertTrue($mapType->checkKey('0'));
+        $this->assertTrue($mapType->checkKey(0));
+        $this->assertTrue($mapType->checkKey('key with spaces'));
+        $this->assertTrue($mapType->checkKey('/^regex$/'));
+
+        // Invalid keys - empty or whitespace-only
+        $this->assertFalse($mapType->checkKey(''));
+        $this->assertFalse($mapType->checkKey(' '));
+        $this->assertFalse($mapType->checkKey('   '));
+        $this->assertFalse($mapType->checkKey("\t"));
+        $this->assertFalse($mapType->checkKey("\n"));
+    }
+
+    public function testCheckKeyRegexValidation(): void
+    {
+        // Map with regex key validation
+        $regexMapType = new DynamicConfigItem('testRegexMap', [
+            'type' => 'map',
+            'validate' => [
+                'key' => 'regex',
+            ],
+        ]);
+
+        // Valid regex patterns
+        $this->assertTrue($regexMapType->checkKey('/^foo$/'));
+        $this->assertTrue($regexMapType->checkKey('/test/i'));
+        $this->assertTrue($regexMapType->checkKey('/^cpu interface/'));
+        $this->assertTrue($regexMapType->checkKey('#pattern#'));
+        $this->assertTrue($regexMapType->checkKey('~pattern~'));
+
+        // Invalid regex patterns
+        $this->assertFalse($regexMapType->checkKey('/unclosed'));
+        $this->assertFalse($regexMapType->checkKey('/invalid[/'));
+        $this->assertFalse($regexMapType->checkKey('/bad(regex/'));
+        $this->assertFalse($regexMapType->checkKey(''));
+        $this->assertFalse($regexMapType->checkKey(' '));
+    }
 }

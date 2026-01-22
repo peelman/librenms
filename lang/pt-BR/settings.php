@@ -276,6 +276,8 @@ return [
         'astext' => [
             'description' => 'Descrições de Sistemas Autônomos',
             'help' => 'Lista de ASNs e suas descrições para exibir nomes personalizados em contextos de Roteamento',
+            'keyPlaceholder' => 'ASN',
+            'valuePlaceholder' => 'Descrição',
         ],
         'auth' => [
             'allow_get_login' => [
@@ -1305,6 +1307,8 @@ return [
         ],
         'nfsen_lasts' => [
             'description' => 'Opções Padrão de Último',
+            'keyPlaceholder' => 'Segundos',
+            'valuePlaceholder' => 'Rótulo de exibição',
         ],
         'nfsen_base' => [
             'description' => 'Diretório Base do NFSen',
@@ -2075,6 +2079,12 @@ return [
         'select' => ':value não é um valor permitido',
         'text' => ':value não é permitido',
         'array' => 'Formato inválido',
+        'map' => 'Formato chave-valor inválido',
+        'nested-map' => 'Formato chave-valor aninhado inválido',
+        'key' => 'Chave inválida',
+        'regex' => 'Padrão regex inválido',
+        'duplicate_key' => 'Chave já existe',
+        'missing_parent' => 'Chave pai ausente',
         'executable' => ':value não é um executável válido',
         'directory' => ':value não é um diretório válido',
     ],

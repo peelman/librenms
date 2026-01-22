@@ -279,27 +279,11 @@ class DynamicConfigItem implements \ArrayAccess
             return false;
         }
 
-        if (($this->options['validateKeyAsRegex'] ?? false) && ! $this->isValidRegex($key)) {
+        if (($this->validate['key'] ?? null) === 'regex' && @preg_match($key, '') === false) {
             return false;
         }
 
         return true;
-    }
-
-    public function getKeyValidationMessage($key): string
-    {
-        $key = (string) $key;
-        if (strlen(trim($key)) === 0) {
-            return __('settings.validate.key');
-        }
-
-        if ($this->options['validateKeyAsRegex'] ?? false) {
-            if (! $this->isValidRegex($key)) {
-                return __('settings.validate.regex');
-            }
-        }
-
-        return __('settings.validate.key');
     }
 
     private function descriptionTranslationKey()
@@ -320,16 +304,6 @@ class DynamicConfigItem implements \ArrayAccess
     private function buildValidator($value)
     {
         return Validator::make(['value' => $value], $this->validate);
-    }
-
-    private function isValidRegex(string $pattern): bool
-    {
-        set_error_handler(static fn () => true);
-
-        $result = @preg_match($pattern, '') !== false;
-        restore_error_handler();
-
-        return $result;
     }
 
     private function sanitizePath(string $path): string|false

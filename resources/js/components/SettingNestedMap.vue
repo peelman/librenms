@@ -10,7 +10,7 @@
   -
   - This program is distributed in the hope that it will be useful,
   - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   - GNU General Public License for more details.
   -
   - You should have received a copy of the GNU General Public License
@@ -41,13 +41,13 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="input-group">
-                            <input type="text" v-model="newSubItemKey[index]" @input="debouncedValidateNewSubKey(index)" class="form-control" placeholder="Key">
+                            <input type="text" v-model="newSubItemKey[index]" @input="validateNewSubKey(index)" class="form-control" :placeholder="$t('Key')">
                         </div>
                         <div v-if="newSubItemKeyErrors[index]" class="text-danger small">{{ newSubItemKeyErrors[index] }}</div>
                     </div>
                     <div class="col-lg-8">
                         <div class="input-group">
-                            <input type="text" v-model="newSubItemValue[index]" @keyup.enter="addSubItem(index)" class="form-control" placeholder="Value">
+                            <input type="text" v-model="newSubItemValue[index]" @keyup.enter="addSubItem(index)" class="form-control" :placeholder="$t('Value')">
                             <span class="input-group-btn">
                                 <button @click="addSubItem(index)" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
                             </span>
@@ -59,7 +59,7 @@
         </div>
         <div v-if="!disabled">
             <div class="input-group">
-                <input type="text" v-model="newSubArray" @input="debouncedValidateNewParentKey" @keyup.enter="addSubArray" class="form-control">
+                <input type="text" v-model="newSubArray" @input="validateNewParentKey" @keyup.enter="addSubArray" class="form-control">
                 <span class="input-group-btn">
                     <button @click="addSubArray" type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
                 </span>
@@ -71,7 +71,6 @@
 
 <script>
     import BaseSetting from "./BaseSetting.vue";
-    import _ from "lodash";
 
     export default {
         name: "SettingNestedMap",
@@ -87,24 +86,8 @@
                 newSubItemKeyErrors: {}
             }
         },
-        created() {
-            this.debouncedValidateNewParentKey = _.debounce(this.validateNewParentKey, 300);
-            this.debouncedValidateNewSubKey = _.debounce(this.validateNewSubKey, 300);
-        },
         methods: {
-            async requestKeyValidation(payload) {
-                try {
-                    const response = await axios.post(route('settings.validate', this.name), payload);
-
-                    return { valid: response.data.valid !== false, error: null };
-                } catch (error) {
-                    return {
-                        valid: false,
-                        error: error.response?.data?.message || 'Invalid key'
-                    };
-                }
-            },
-            async validateNewParentKey() {
+            validateNewParentKey() {
                 if (!this.newSubArray || !this.newSubArray.trim()) {
                     this.newSubArrayError = '';
                     return;
@@ -115,14 +98,9 @@
                     return;
                 }
 
-                const result = await this.requestKeyValidation({
-                    scope: 'key',
-                    key: this.newSubArray
-                });
-
-                this.newSubArrayError = result.valid ? '' : result.error;
+                this.newSubArrayError = '';
             },
-            async validateNewSubKey(index) {
+            validateNewSubKey(index) {
                 const key = this.newSubItemKey[index];
                 if (!key || !key.trim()) {
                     this.$delete(this.newSubItemKeyErrors, index);
@@ -135,20 +113,9 @@
                     return;
                 }
 
-                const result = await this.requestKeyValidation({
-                    scope: 'subkey',
-                    parent: index,
-                    key,
-                    value: this.newSubItemValue[index]
-                });
-
-                if (!result.valid) {
-                    this.$set(this.newSubItemKeyErrors, index, result.error);
-                } else {
-                    this.$delete(this.newSubItemKeyErrors, index);
-                }
+                this.$delete(this.newSubItemKeyErrors, index);
             },
-            async addSubItem(index) {
+            addSubItem(index) {
                 if (this.disabled) return;
 
                 const key = this.newSubItemKey[index];
@@ -156,20 +123,12 @@
                 if (!key || !key.trim()) return;
 
                 const existing = this.localList[index] || {};
-                if (Object.prototype.hasOwnProperty.call(existing, key)) return;
-
-                if (this.newSubItemKeyErrors[index]) return;
-
-                const validation = await this.requestKeyValidation({
-                    scope: 'subkey',
-                    parent: index,
-                    key,
-                    value
-                });
-                if (!validation.valid) {
-                    this.$set(this.newSubItemKeyErrors, index, validation.error);
+                if (Object.prototype.hasOwnProperty.call(existing, key)) {
+                    this.$set(this.newSubItemKeyErrors, index, this.$t('settings.validate.duplicate_key'));
                     return;
                 }
+
+                if (this.newSubItemKeyErrors[index]) return;
 
                 // Use spread to create new object for Vue 2 reactivity
                 this.localList = {
@@ -215,22 +174,16 @@
                 };
                 this.$emit('input', this.localList);
             },
-            async addSubArray() {
+            addSubArray() {
                 if (this.disabled) return;
 
                 if (!this.newSubArray || !this.newSubArray.trim()) return;
-                if (Object.prototype.hasOwnProperty.call(this.localList, this.newSubArray)) return;
-
-                if (this.newSubArrayError) return;
-
-                const validation = await this.requestKeyValidation({
-                    scope: 'key',
-                    key: this.newSubArray
-                });
-                if (!validation.valid) {
-                    this.newSubArrayError = validation.error;
+                if (Object.prototype.hasOwnProperty.call(this.localList, this.newSubArray)) {
+                    this.newSubArrayError = this.$t('settings.validate.duplicate_key');
                     return;
                 }
+
+                if (this.newSubArrayError) return;
 
                 this.localList = {
                     ...this.localList,

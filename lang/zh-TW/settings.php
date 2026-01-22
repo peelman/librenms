@@ -212,6 +212,8 @@ return [
         'astext' => [
             'description' => '自治系統描述',
             'help' => '用於在路由上下文中顯示自訂名稱的ASN列表及其描述',
+            'keyPlaceholder' => 'ASN',
+            'valuePlaceholder' => '描述',
         ],
         'auth_ad_base_dn' => [
             'description' => '基礎 DN',
@@ -652,6 +654,8 @@ return [
         ],
         'nfsen_lasts' => [
             'description' => 'Default Last Options',
+            'keyPlaceholder' => '秒',
+            'valuePlaceholder' => '顯示標籤',
         ],
         'nfsen_split_char' => [
             'description' => '分隔字元',
@@ -1010,12 +1014,18 @@ return [
         'seconds' => '秒',
     ],
     'validate' => [
-        'boolean' => ':value is not a valid boolean',
-        'email' => ':value is not a valid email',
-        'integer' => ':value is not an integer',
-        'password' => 'The password is incorrect',
-        'select' => ':value is not an allowed value',
-        'text' => ':value is not allowed',
-        'array' => 'Invalid format',
+        'boolean' => ':value 不是有效的布林值',
+        'email' => ':value 不是有效的電子郵件',
+        'integer' => ':value 不是整數',
+        'password' => '密碼不正確',
+        'select' => ':value 不是允許的值',
+        'text' => ':value 不允許',
+        'array' => '格式無效',
+        'map' => '無效的鍵值格式',
+        'nested-map' => '無效的巢狀鍵值格式',
+        'key' => '無效的鍵',
+        'regex' => '無效的正規表達式模式',
+        'duplicate_key' => '鍵已存在',
+        'missing_parent' => '缺少父鍵',
     ],
 ];

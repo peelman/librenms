@@ -473,10 +473,6 @@
                 "65333": "Cymru Bogon Feed"
             },
             "type": "map",
-            "options": {
-                "keyPlaceholder": "ASN",
-                "valuePlaceholder": "Description"
-            },
             "group": "discovery",
             "section": "general",
             "order": 4
@@ -5127,10 +5123,6 @@
                 "percent": "load"
             },
             "type": "map",
-            "options": {
-                "keyPlaceholder": "IPMI Unit",
-                "valuePlaceholder": "Sensor Type"
-            },
             "group": "discovery",
             "section": "ipmi",
             "order": 1
@@ -5264,10 +5256,6 @@
         "location_map": {
             "default": null,
             "type": "map",
-            "options": {
-                "keyPlaceholder": "SNMP sysLocation",
-                "valuePlaceholder": "Mapped Location"
-            },
             "validate": {
                 "value": "array",
                 "value.*": "string"
@@ -5279,12 +5267,8 @@
         "location_map_regex": {
             "default": null,
             "type": "map",
-            "options": {
-                "keyPlaceholder": "Regex Pattern",
-                "valuePlaceholder": "Mapped Location",
-                "validateKeyAsRegex": true
-            },
             "validate": {
+                "key": "regex",
                 "value": "array",
                 "value.*": "string"
             },
@@ -5295,12 +5279,8 @@
         "location_map_regex_sub": {
             "default": null,
             "type": "map",
-            "options": {
-                "keyPlaceholder": "Regex Pattern",
-                "valuePlaceholder": "Replacement",
-                "validateKeyAsRegex": true
-            },
             "validate": {
+                "key": "regex",
                 "value": "array",
                 "value.*": "string"
             },
@@ -5598,11 +5578,7 @@
                 "115200": "36 hours",
                 "153600": "48 hours"
             },
-            "type": "map",
-            "options": {
-                "keyPlaceholder": "Seconds",
-                "valuePlaceholder": "Display Label"
-            }
+            "type": "map"
         },
         "nfsen_base": {
             "default": [],
@@ -6558,14 +6534,10 @@
                 "/^cpu interface/": "Mgmt"
             },
             "type": "map",
-            "options": {
-                "keyPlaceholder": "Regex Pattern",
-                "valuePlaceholder": "Replacement",
-                "validateKeyAsRegex": true
-            },
             "group": "discovery",
             "section": "ports",
             "validate": {
+                "key": "regex",
                 "value": "array",
                 "value.*": "string"
             },

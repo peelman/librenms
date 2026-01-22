@@ -10,7 +10,7 @@
   -
   - This program is distributed in the hope that it will be useful,
   - but WITHOUT ANY WARRANTY; without even the implied warranty of
-  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   - GNU General Public License for more details.
   -
   - You should have received a copy of the GNU General Public License
@@ -86,7 +86,6 @@
 
 <script>
     import BaseSetting from "./BaseSetting.vue";
-    import _ from "lodash";
 
     export default {
         name: "SettingMap",
@@ -102,36 +101,51 @@
                 editingKeys: {}  // Track in-progress key edits separately
             }
         },
-        created() {
-            this.debouncedValidateExistingKey = _.debounce(this.validateExistingKey, 300);
-            this.debouncedValidateNewKey = _.debounce(this.validateNewKeyRemote, 300);
-        },
         computed: {
             keyPlaceholder() {
-                return this.options?.keyPlaceholder || 'Key';
+                // Use translation key if available, otherwise fall back to 'Key'
+                const settingKey = 'settings.settings.' + this.name + '.keyPlaceholder';
+                return this.$te(settingKey) ? this.$t(settingKey) : this.$t('Key');
             },
             valuePlaceholder() {
-                return this.options?.valuePlaceholder || 'Value';
+                // Use translation key if available, otherwise fall back to 'Value'
+                const settingKey = 'settings.settings.' + this.name + '.valuePlaceholder';
+                return this.$te(settingKey) ? this.$t(settingKey) : this.$t('Value');
             },
+            validateKeyAsRegex() {
+                return this.validate?.key === 'regex';
+            }
         },
         methods: {
-            async requestKeyValidation(key, value) {
-                try {
-                    const response = await axios.post(route('settings.validate', this.name), {
-                        scope: 'key',
-                        key,
-                        value,
-                    });
+            isValidRegex(pattern) {
+                if (!pattern || !pattern.trim()) return false;
 
-                    return { valid: response.data.valid !== false, error: null };
-                } catch (error) {
-                    return {
-                        valid: false,
-                        error: error.response?.data?.message || 'Invalid key'
-                    };
+                // Try to create a RegExp - if it fails, it's invalid
+                try {
+                    // Check if pattern has delimiters (like /pattern/flags)
+                    const match = pattern.match(/^\/(.*)\/([gimsuy]*)$/);
+                    if (match) {
+                        new RegExp(match[1], match[2]);
+                    } else {
+                        new RegExp(pattern);
+                    }
+                    return true;
+                } catch (e) {
+                    return false;
                 }
             },
-            async validateExistingKey(oldKey, newValue) {
+            validateKey(key) {
+                if (!key || !key.trim()) {
+                    return this.$t('settings.validate.key');
+                }
+
+                if (this.validateKeyAsRegex && !this.isValidRegex(key)) {
+                    return this.$t('settings.validate.regex');
+                }
+
+                return '';
+            },
+            validateExistingKey(oldKey, newValue) {
                 if (!newValue.trim()) return;
 
                 if (Object.prototype.hasOwnProperty.call(this.localList, newValue) && newValue !== oldKey) {
@@ -139,14 +153,14 @@
                     return;
                 }
 
-                const result = await this.requestKeyValidation(newValue, this.localList[oldKey]);
-                if (!result.valid) {
-                    this.$set(this.keyErrors, oldKey, result.error);
+                const error = this.validateKey(newValue);
+                if (error) {
+                    this.$set(this.keyErrors, oldKey, error);
                 } else {
                     this.$delete(this.keyErrors, oldKey);
                 }
             },
-            async validateNewKeyRemote() {
+            validateNewKey() {
                 if (!this.newItemKey.trim()) {
                     this.newKeyError = '';
                     return;
@@ -157,8 +171,7 @@
                     return;
                 }
 
-                const result = await this.requestKeyValidation(this.newItemKey, this.newItemValue);
-                this.newKeyError = result.valid ? '' : result.error;
+                this.newKeyError = this.validateKey(this.newItemKey);
             },
             keyError(key) {
                 return this.keyErrors[key] || '';
@@ -166,12 +179,7 @@
             onKeyInput(oldKey, newValue) {
                 // Track the editing value
                 this.$set(this.editingKeys, oldKey, newValue);
-
-                if (newValue.trim()) {
-                    this.debouncedValidateExistingKey(oldKey, newValue);
-                } else {
-                    this.$delete(this.keyErrors, oldKey);
-                }
+                this.validateExistingKey(oldKey, newValue);
             },
             commitKey(oldKey, newKey) {
                 // Clean up editing state
@@ -203,9 +211,6 @@
                 this.localList = newList;
                 this.$emit('input', this.localList);
             },
-            validateNewKey() {
-                this.debouncedValidateNewKey();
-            },
             addItem() {
                 if (this.disabled) return;
                 if (!this.newItemKey.trim()) return;
@@ -215,7 +220,12 @@
                     return;
                 }
 
-                if (this.newKeyError) return;
+                // Validate key before adding
+                const error = this.validateKey(this.newItemKey);
+                if (error) {
+                    this.newKeyError = error;
+                    return;
+                }
 
                 // Create a new object to ensure reactivity
                 this.localList = {

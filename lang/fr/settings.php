@@ -203,6 +203,8 @@ return [
         'astext' => [
             'description' => 'Descriptions des systèmes autonomes',
             'help' => 'Liste des ASN et leurs descriptions pour afficher des noms personnalisés dans les contextes de routage',
+            'keyPlaceholder' => 'ASN',
+            'valuePlaceholder' => 'Description',
         ],
         'auth_ad_base_dn' => [
             'description' => 'Base DN',
@@ -711,6 +713,8 @@ return [
         ],
         'nfsen_lasts' => [
             'description' => 'Défaut Last Options',
+            'keyPlaceholder' => 'Secondes',
+            'valuePlaceholder' => 'Libellé d\'affichage',
         ],
         'nfsen_split_char' => [
             'description' => 'Séparateur',
@@ -1141,5 +1145,11 @@ return [
         'select' => ':value n\'est pas une valeur autorisée',
         'text' => ':value n\'est pas autorisé',
         'array' => 'Format invalide',
+        'map' => 'Format clé-valeur invalide',
+        'nested-map' => 'Format clé-valeur imbriqué invalide',
+        'key' => 'Clé invalide',
+        'regex' => 'Motif regex invalide',
+        'duplicate_key' => 'La clé existe déjà',
+        'missing_parent' => 'Clé parente manquante',
     ],
 ];

@@ -158,6 +158,8 @@ return [
         'astext' => [
             'description' => '自治系统描述',
             'help' => '用于在路由上下文中显示自定义名称的ASN列表及其描述',
+            'keyPlaceholder' => 'ASN',
+            'valuePlaceholder' => '描述',
         ],
         'auth_ad_base_dn' => [
             'description' => '基础 DN',
@@ -536,6 +538,8 @@ return [
         ],
         'nfsen_lasts' => [
             'description' => '默认最后选项',
+            'keyPlaceholder' => '秒',
+            'valuePlaceholder' => '显示标签',
         ],
         'nfsen_split_char' => [
             'description' => '分隔字符',
@@ -820,5 +824,11 @@ return [
         'select' => ':值不是允许的值',
         'text' => ':值不允许',
         'array' => '格式无效',
+        'map' => '无效的键值格式',
+        'nested-map' => '无效的嵌套键值格式',
+        'key' => '无效的键',
+        'regex' => '无效的正则表达式模式',
+        'duplicate_key' => '键已存在',
+        'missing_parent' => '缺少父键',
     ],
 ];
