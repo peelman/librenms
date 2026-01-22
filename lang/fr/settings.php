@@ -1145,11 +1145,8 @@ return [
         'select' => ':value n\'est pas une valeur autorisée',
         'text' => ':value n\'est pas autorisé',
         'array' => 'Format invalide',
-        'map' => 'Format clé-valeur invalide',
-        'nested-map' => 'Format clé-valeur imbriqué invalide',
         'key' => 'Clé invalide',
         'regex' => 'Motif regex invalide',
         'duplicate_key' => 'La clé existe déjà',
-        'missing_parent' => 'Clé parente manquante',
     ],
 ];

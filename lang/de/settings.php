@@ -810,11 +810,8 @@ return [
         'select' => ':value ist kein erlaubter Wert',
         'text' => ':value ist nicht erlaubt',
         'array' => 'Ungültiges Format',
-        'map' => 'Ungültiges Schlüssel-Wert-Format',
-        'nested-map' => 'Ungültiges verschachteltes Schlüssel-Wert-Format',
         'key' => 'Ungültiger Schlüssel',
         'regex' => 'Ungültiges Regex-Muster',
         'duplicate_key' => 'Schlüssel existiert bereits',
-        'missing_parent' => 'Fehlender übergeordneter Schlüssel',
     ],
 ];

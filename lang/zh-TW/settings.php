@@ -1021,11 +1021,8 @@ return [
         'select' => ':value 不是允許的值',
         'text' => ':value 不允許',
         'array' => '格式無效',
-        'map' => '無效的鍵值格式',
-        'nested-map' => '無效的巢狀鍵值格式',
         'key' => '無效的鍵',
         'regex' => '無效的正規表達式模式',
         'duplicate_key' => '鍵已存在',
-        'missing_parent' => '缺少父鍵',
     ],
 ];

@@ -824,11 +824,8 @@ return [
         'select' => ':值不是允许的值',
         'text' => ':值不允许',
         'array' => '格式无效',
-        'map' => '无效的键值格式',
-        'nested-map' => '无效的嵌套键值格式',
         'key' => '无效的键',
         'regex' => '无效的正则表达式模式',
         'duplicate_key' => '键已存在',
-        'missing_parent' => '缺少父键',
     ],
 ];
